@@ -4,6 +4,8 @@ import { Pizza } from '../../models/pizza.model';
 import { PizzasService } from '../../services/pizzas.service';
 
 import * as fromStore from '../../store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'products',
@@ -13,31 +15,32 @@ import * as fromStore from '../../store';
     <div class="products">
       <div class="products__new">
         <a
-          class="btn btn__ok" 
+          class="btn btn__ok"
           routerLink="./new">
           New Pizza
         </a>
       </div>
       <div class="products__list">
-        <div *ngIf="!((pizzas)?.length)">
-          No pizzas, add one to get started.
-        </div>
-        <pizza-item
-          *ngFor="let pizza of (pizzas)"
-          [pizza]="pizza">
-        </pizza-item>
+        <ng-container *ngIf="(pizzas$ | async) as pizzas">
+          <div *ngIf="!((pizzas)?.length)">
+            No pizzas, add one to get started.
+          </div>
+          <pizza-item
+            *ngFor="let pizza of pizzas"
+            [pizza]="pizza">
+          </pizza-item>
+        </ng-container>
       </div>
     </div>
-  `,
+  `
 })
 export class ProductsComponent implements OnInit {
-  pizzas: Pizza[];
+  pizzas$: Observable<Pizza[]>;
 
-  constructor(private pizzaService: PizzasService) {}
+  constructor(private store: Store<fromStore.ProductsState>) {}
 
   ngOnInit() {
-    this.pizzaService.getPizzas().subscribe(pizzas => {
-      this.pizzas = pizzas;
-    });
+    this.store.dispatch(new fromStore.LoadPizzas());
+    this.pizzas$ = this.store.select(fromStore.getPizzas);
   }
 }

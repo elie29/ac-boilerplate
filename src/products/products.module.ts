@@ -3,6 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
+// Store
+import { effects, reducers } from './store';
 
 // components
 import * as fromComponents from './components';
@@ -20,16 +25,16 @@ import * as fromServices from './services';
 export const ROUTES: Routes = [
   {
     path: '',
-    component: fromContainers.ProductsComponent,
+    component: fromContainers.ProductsComponent
   },
   {
     path: ':id',
-    component: fromContainers.ProductItemComponent,
+    component: fromContainers.ProductItemComponent
   },
   {
     path: 'new',
-    component: fromContainers.ProductItemComponent,
-  },
+    component: fromContainers.ProductItemComponent
+  }
 ];
 
 @NgModule({
@@ -38,9 +43,11 @@ export const ROUTES: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forChild(ROUTES),
+    StoreModule.forFeature('products', reducers),
+    EffectsModule.forFeature(effects)
   ],
   providers: [...fromGuards.guards, ...fromServices.services],
   declarations: [...fromContainers.containers, ...fromComponents.components],
-  exports: [...fromContainers.containers, ...fromComponents.components],
+  exports: [...fromContainers.containers, ...fromComponents.components]
 })
 export class ProductsModule {}
