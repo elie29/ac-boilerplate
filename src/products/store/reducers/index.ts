@@ -22,17 +22,19 @@ export const getProductsState = createFeatureSelector<ProductsState>(
   'products'
 );
 
-/**
- * Select pizzas state from the products state
- * A selector takes a feature selector or a combination of selectors
- * and return slice of the state
- */
+// PizzasState selector
 export const getPizzasState = createSelector(
   getProductsState,
   (state: ProductsState) => state.pizzas
 );
 
-export const getPizzas = createSelector(
+// Pizzas array selector
+export const getPizzas = createSelector(getPizzasState, fromPizzas.getPizzas);
+export const getPizzasLoading = createSelector(
   getPizzasState,
-  (state: fromPizzas.PizzaState) => state.pizzas
+  fromPizzas.getPizzasLoading
+);
+export const getPizzasLoaded = createSelector(
+  getPizzasState,
+  fromPizzas.getPizzasLoaded
 );
