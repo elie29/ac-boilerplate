@@ -22,7 +22,7 @@ import { Observable } from 'rxjs/Observable';
       </div>
       <div class="products__list">
         <ng-container *ngIf="(pizzas$ | async) as pizzas">
-          <div *ngIf="!((pizzas)?.length)">
+          <div *ngIf="!(pizzas?.length)">
             No pizzas, add one to get started.
           </div>
           <pizza-item
