@@ -17,6 +17,7 @@ export const reducers: ActionReducerMap<ProductsState> = {
   pizzas: fromPizzas.reducer
 };
 
+// First level selector
 export const getProductsState = createFeatureSelector<ProductsState>(
   'products'
 );
